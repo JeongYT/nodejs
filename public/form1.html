@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품추가</title>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+</head>
+<body>
+    <div>
+        <form id="insert_form">
+            <fieldset>
+                <legend>데이터 추가</legend>
+                <table>
+                    <tr>
+                        <td><label>상품명</label></td>
+                        <td><input type="text" name="name" id="name" required></td>
+                    </tr>
+                    <tr>
+                        <td><label>모델 번호</label></td>
+                        <td><input type="text" name="modelnumber" id="modelnumber" required></td>
+                    </tr>
+                    <tr>
+                        <td><label>시리즈</label></td>
+                        <td><input type="text" name="series" id="series" required></td>
+                    </tr>
+                </table>
+                <input type="submit" value="추가">
+            </fieldset>
+        </form>
+        <input type="text" id="id">
+        <input type="button" value="조회" id="select">
+        <input type="button" value="삭제" id="delete">
+        <input type="button" value="수정" id="update">
+    </div>
+    <hr>
+    <h2> 상품목록 </h2>
+    <table id="output" border="1">
+        <tr>
+            <th>아이디</th>
+            <th>이름</th>
+            <th>모델명</th>
+            <th>시리즈</th>
+        </tr>
+    </table>
+    <script>
+        // 전송버튼 클릭시 데이터 추가하기
+        $('#insert_form').submit(function(e){
+
+            // 입력폼에 입력한 데이터 전송하기
+            var data=$(this).serialize();
+            $.post('/products',data,function(){
+                $.getJSON('/products',function(d){
+                    $(d).each(function(i,item){
+                        var out='';
+                        out+="<tr>";
+                        out+="<td>"+item.id+"</td>";
+                        out+="<td>"+item.name+"</td>";
+                        out+="<td>"+item.modelnumber+"</td>";
+                        out+="<td>"+item.series+"</td>";
+                        out+="</tr>";
+                        // console.log(out);
+                        $('#output').append(out);
+                    });
+                });
+            });
+            e.preventDefault(); // 기본이벤트 제거
+        });
+
+        // id로 조회하기
+        $('#select').click(function(){
+            // ajax를 수행하기
+            var id=$('#id').val();
+            var str='/products/'+id;
+            console.log(id,str);
+            
+            
+            $.getJSON(str,function(d){
+                $('#output').empty();
+                console.log(d);
+                $(d).each(function(i,item){
+                    var out='';
+                    out+="</tr>";
+                    out+="<tr>";
+                    out+="<td>"+item.id+"</td>";
+                    out+="<td>"+item.name+"</td>";
+                    out+="<td>"+item.modelnumber+"</td>";
+                    out+="<td>"+item.series+"</td>";
+                    out+="</tr>";
+                    // console.log(out);
+                    $('#output').append(out);
+                });
+            }); 
+        });
+
+        // 삭제하기
+        $('#delete').click(function(){
+            var id=$('#id').val();
+            var str='/products/'+id;
+            var out="";
+
+            $.ajax({
+                url:str,
+                type:'delete',
+                header:{
+                    'Content-Type':"application/json"
+                },
+                success:function(){
+                    console.log(id+"번을 삭제했습니다.");
+                    out="<p>" + id + "번을 삭제했습니다.</p>";
+                    $('body').append(out);
+                }
+            });
+        }); // delete end
+
+        // 수정하기
+        $('#update').click(function(){
+            var id=$('#id').val();
+            var name=$('#name').val();
+            var modelnumber=$('#modelnumber').val();
+            var series=$('#series').val();
+            var str='/products/'+id;
+            // ajax를 수행한다.4
+            $.ajax({
+                url:str,
+                type:'put',
+                dataType:'JSON',
+                data:{name,modelnumber,series},
+                success:function(d,status){
+                    console.log(status);
+                    console.log(d);
+                    if(d.affectedRows>0){
+                        $(`<h2>${id} 수정완료..</h2>`).appendTo('body');
+                    }else{
+                        $(`<h2>${id}가 없다.</h2>`).appendTo('body');
+                    }
+                }
+            });
+        }); // update end
+    </script>
+</body>
+</html>

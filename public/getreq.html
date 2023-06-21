@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>getreq.html</title>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+</head>
+<body>
+    <button id="get">GET</button>
+    <button id="post">POST</button>
+    <button id="put">PUT</button>
+    <button id="delete">DELETE</button>
+    <hr>
+    <h1> input</h1>
+    순번 : <input type="text" id="num"><br>
+    이름 : <input id="name"> <br>
+    가격 : <input id="price">
+    <h1> output </h1>
+    <textarea id="output" disabled cols="40" rows="25"></textarea>
+    <script>
+        // 전체조회
+        $('#get').click(function(req,res){
+            $.ajax({
+                url:'/products',
+                type:'get',
+                dataType:'text',
+                success:function(data){
+                    $('#output').val(data);
+                }
+            });
+        });
+
+        // 데이터 추가
+        $('#post').click(function(req,res){
+            $.ajax({
+                url:'/products',
+                type:'post',
+                dataType:'text',
+                data:{
+                    name:$('#name').val(),
+                    price:$('#price').val()
+                },
+                success:function(data){
+                    $('#output').val(data);
+                },
+                error:function(){ }
+            });
+        });
+
+        // 데이터 수정
+        $('#put').click(function(){
+            var id=$('#num').val();
+            $.ajax({
+                url:'/products/'+id,
+                type:'put',
+                dataType:'text',
+                data:{
+                    name:$('#name').val(),
+                    price:$('#price').val()
+                },
+                success:function(data){
+                    $('#output').val(data);
+                },
+                error:function(){ }
+            });
+        });
+
+        // 데이터 삭제
+        $('#delete').click(function(){
+            var id=$('#num').val();
+            $.ajax({
+                url:'/products/'+id,
+                type:'delete',
+                dataType:'text',
+                success:function(data){
+                    $('#output').val(data);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

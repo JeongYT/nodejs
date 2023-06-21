@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>로그인 테스트</title>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+</head>
+<body>
+    <h1>로그인</h1>
+    <br>
+    <form method="post" id="member">
+        <table>
+            <tr>
+                <td><label>이름</label></td>
+                <td><input type="text" name="user_name" id="user_name" /></td>
+            </tr>   
+        </table>
+        <input type="submit" value="전송" name=""/>
+    </form>
+    <h1 id="txt"></h1>
+    <hr>
+    <button id="food"> Food </button>
+
+
+
+    <script>
+
+        $('#food').on('click',function(){
+            $.ajax({
+                url:"/data.html",
+                type:"post",
+                success:function(data){
+                    $('body').append(data);
+                    console.log(data);
+                }
+            });
+        });
+
+
+
+
+
+
+
+    $('#member').on('submit',function(){
+        var d=$(this).serialize();
+        $.ajax({
+            url:'/user',
+            type:'post',
+            data: d,
+            success:function(result){
+                $('#txt').text(result+"님 환영합니다");
+                console.log(result);
+            }
+        });
+        return false;
+    });
+
+    $.ajax({
+        url:'/parameter',
+        type:'GET',
+        data:{
+            name:"parksong",
+            region:"seoul"
+        },
+        success:function(data){
+            $('body').append(data);
+        }
+    });
+    </script>
+</body>
+</html>

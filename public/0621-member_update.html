@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정보수정</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>학생 정보수정</h1>
+    <div class="container">
+
+        <form method="" action="" id="myForm">
+            <div class="mb-3">
+                <label class="form-label">아이디</label>
+                <input type="text" class="form-control" id="id" placeholder="아이디" name="id">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">이름</label>
+                <input type="text" class="form-control" id="name" placeholder="이름" name="name">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">비밀번호</label>
+                <input type="password" class="form-control" id="pw" placeholder="비밀번호" name="pw">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">이메일</label>
+                <input type="email" class="form-control" id="email" placeholder="이메일" name="email">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">성별 - </label>
+                남성 : <input type="radio" class="form-check-input" name="gender" value="man" checked>
+                여성 : <input type="radio" class="form-check-input" name="gender" value="woman">
+            </div>
+            <button class="btn btn-primary" type="submit">수정하기</button>
+        </form>
+        <div id="content"></div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+        <script>
+            $('#myForm').submit(function(e){
+                var data=$(this).serialize(); // 직렬화하다
+                var id = $('#id').val();
+                
+                $.ajax({
+                    url:'/students/:id',
+                    type:"put",
+                    data:data,
+                    success:function(result){
+                        detail(id);
+                        $("<h1>수정이완료됨</h1>").appendTo('#content');
+                    }
+                });
+                e.preventDefault(); // 기본이벤트 제거
+            });
+
+            function detail(id) {
+                $('#myForm').empty();
+                $.ajax({
+                    url: '/students/' + id,
+                    type: 'get',
+                    success: function (d) {
+                        var out = "<div class='container mt-3'>";
+                        out += "<ul class='list-group'>";
+                        out += `<li class='list-group-item active'>id :<span> ${d[0].id} </span>`;
+                        out += `<li class='list-group-item'>name : ${d[0].name} </li>`;
+                        out += `<li class='list-group-item'>password : ${d[0].password} </li>`;
+                        out += `<li class='list-group-item' >email : ${d[0].email} </li>`;
+                        out += `<li class='list-group-item' >gender : ${d[0].gender} </li>`;
+                        out += "</ul>";
+                        out += `<a href="index.html">첫화면 돌아가기</a>`
+                        out += "</div>";
+                        $(out).appendTo('#content');
+                    }
+                });
+            }
+        </script>
+    </div>
+</body>
+</html>

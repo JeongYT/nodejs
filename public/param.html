@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script>
+        $(document).ready(function(){
+            var data={
+                name:"이순신",
+                region:"Seoul"
+            }
+            var data2={
+                name:"Hello",
+                region:"Seoul"
+            }
+            // $('<h1></h1>').text($.param(data)).appendTo('body');
+            // $('<h1></h1>').text($.param(data2)).appendTo('body');
+        })
+    </script>
+</head>
+<body>
+    <form id="myForm">
+        Name : <input type="text" id="name" name="name"><br>
+        Region : <input type="text" id="region" name="region"><br>
+        <input type="submit" value="Get">
+    </form>
+    <div id="wrap"></div>
+
+    <script>
+        $('#myForm').submit(function(e){
+            var serialize=$(this).serialize();
+            var serializeArray=$(this).serializeArray();
+
+            $('<h1></h1>').text(serialize).appendTo('#wrap');
+            // $('<h1></h1>').text(serializeArray).appendTo('#wrap');
+            // console.log(serializeArray);
+
+            var out='';
+            for(var i in serializeArray){
+                out+=serializeArray[i].name + " : " + serializeArray[i].value + "<br>";
+            }
+            $('<h1></h1>').html(out).appendTo('#wrap');
+
+            // $('#wrap').load(out);
+            
+            // 기본 이벤트를 제거
+            e.preventDefault();
+
+        });
+    </script>
+</body>
+</html>
