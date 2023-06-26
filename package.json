@@ -10,9 +10,13 @@
   "license": "ISC",
   "dependencies": {
     "async": "^3.2.4",
+    "body-parser": "^1.20.2",
     "conf": "^11.0.1",
+    "cookie-parser": "^1.4.6",
     "express": "^3.4.7",
+    "express-session": "^1.17.3",
     "mysql": "^2.18.1",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "serve-static": "^1.15.0"
   }
 }

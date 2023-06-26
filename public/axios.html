@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1> axios로 요청하기</h1>
+    <script>
+        axios({
+            method:'get',
+            url:'/students',
+            responseType:'JSON'
+        }).then(function (response) {
+            console.log(JSON.parse(response.data));
+            var data=JSON.parse(response.data);
+            data.forEach(e => {
+                // document.write(element.id + '<br>');
+                const temp=document.createElement("div");
+                temp.innerHTML=`<p>${e.id} : ${e.name}</p>`
+                document.querySelector('body').append(temp);
+            })
+        });
+    </script>
+</body>
+</html>
